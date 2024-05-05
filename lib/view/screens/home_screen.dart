@@ -47,7 +47,7 @@ class HomeScreen extends StatelessWidget {
                   Expanded(
                     child: GridView.count(
                       crossAxisCount: 2,
-                      childAspectRatio: 1 / 1.42,
+                      childAspectRatio: 1 / 1.5,
                       crossAxisSpacing: 5,
                       mainAxisSpacing: 5,
                       physics: BouncingScrollPhysics(),
@@ -64,6 +64,7 @@ class HomeScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Stack(alignment: Alignment.bottomLeft, children: [
                                 Container(
@@ -76,6 +77,39 @@ class HomeScreen extends StatelessWidget {
                                     fit: BoxFit.fitWidth,
                                   ),
                                 ),
+                                //rating
+                                if (controller.dataList[index].rating != null)
+                                  Positioned(
+                                    top: 20,
+                                    right: 2,
+                                    child: Container(
+                                      width: 35,
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 2, horizontal: 2),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Colors.amber[100]!.withOpacity(0.8),
+                                        borderRadius: BorderRadius.circular(3),
+                                      ),
+                                      child: Center(
+                                          child: Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.amber[600],
+                                            size: 12,
+                                          ),
+                                          Text(
+                                            '${controller.dataList[index].rating}',
+                                            style: TextStyle(
+                                                color: Colors.amber[600],
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600),
+                                          ),
+                                        ],
+                                      )),
+                                    ),
+                                  ),
                                 if (controller.dataList[index].priceSign !=
                                     null)
                                   Container(
@@ -106,15 +140,49 @@ class HomeScreen extends StatelessWidget {
                                   fontWeight: FontWeight.w900,
                                 ),
                               ),
-                              SizedBox(height: 5,),
+                              SizedBox(
+                                height: 5,
+                              ),
                               Text(
                                 '${controller.dataList[index].description}',
-                                maxLines: 3,
+                                maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: Colors.grey,
                                   fontSize: 12,
                                 ),
+                              ),
+                              SizedBox(
+                                height: 6,
+                              ),
+                              //price
+                              Row(
+                                children: [
+                                  Text(
+                                    '\$ ${controller.dataList[index].price}',
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w900,
+                                    ),
+                                  ),
+                                  Spacer(),
+                                  CircleAvatar(
+                                    backgroundColor: Colors.black,
+                                    radius: 16,
+                                    child: IconButton(
+                                      icon: Icon(
+                                        controller.isCard(controller.dataList[index].id) ? Icons.add : Icons.done,
+                                        color: Colors.white,
+                                        size: 18,
+                                      ),
+                                      onPressed: () {
+                                        controller.isCard(controller.dataList[index].id);
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),

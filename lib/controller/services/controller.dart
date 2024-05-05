@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:makeup_app/controller/end_point.dart';
@@ -22,7 +24,8 @@ class HomeController extends GetxController {
   ];
   bool isloding = true;
   int currentIndex = 0;
-
+  IconData addToCartIcon = Icons.add;
+  bool inCart = false;
   late bool isLoding = true;
 
   void changeNavBar(int index) {
@@ -30,21 +33,60 @@ class HomeController extends GetxController {
     update();
   }
 
-
   List<HomeModel> dataList=[];
-
-  void getHomeData() async {
-    try{
-      isLoding = true;
-      var product = await RemoteServices.getDataList();
-      if(product != null){
-        dataList = product;
-        print(product.length);
-      }
-    }finally{
-      isLoding = false;
-    };
+ Future<List<HomeModel>?> getHomeData()async{
+   isLoding = true;
+    await RemoteServices.getData().then((value){
+      print('Done');
+      dataList = value!;
+    }).catchError((error){
+      print(error.toString());
+    });
+   isLoding =false;
     update();
+    return null;
+ }
 
-  }
+ void addToCartFunction(){
+
+   inCart ? addToCartIcon = Icons.add : addToCartIcon = Icons.done;
+   update();
+ }
+
+ bool isCard(int id){
+   if(dataList.any((product)=> product.id == id)){
+  return true;
+   }
+   update();
+   return false;
+
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
